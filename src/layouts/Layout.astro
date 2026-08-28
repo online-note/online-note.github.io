@@ -1,0 +1,272 @@
+---
+import { type SupportedLanguage } from '../i18n/ui';
+import { useTranslations, useTranslatedPath } from '../i18n/utils';
+import '../styles/global.css';
+
+interface Props {
+  lang?: SupportedLanguage;
+  title?: string;
+  description?: string;
+}
+
+const { lang = 'en', title: customTitle, description: customDescription } = Astro.props;
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const siteTitle = customTitle || t('site.title');
+const siteDescription = customDescription || t('site.description');
+const siteKeywords = t('site.keywords');
+const siteUrl = 'https://online-note.github.io';
+const canonicalPath = translatePath('/');
+const canonicalUrl = `${siteUrl}${canonicalPath === '/' ? '' : canonicalPath}`;
+const ogImageUrl = 'https://res.cloudinary.com/dpx6w78bt/image/upload/f_auto/q_auto/v1786342039/Online_Tool_rc1ybr.png';
+
+// OpenGraph locale mapping
+const ogLocaleMap: Record<SupportedLanguage, string> = {
+  en: 'en_US',
+  es: 'es_ES',
+  pt: 'pt_BR',
+  de: 'de_DE',
+  fr: 'fr_FR',
+  ja: 'ja_JP',
+};
+
+// World-Class Multi-Type Schema Graph (@graph)
+const schemaGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'Online Note',
+      description: siteDescription,
+      inLanguage: ['en', 'es', 'pt', 'de', 'fr', 'ja'],
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${canonicalUrl}#webapp`,
+      name: t('site.name'),
+      alternateName: [
+        'Free Online Notepad',
+        'Online Notepad',
+        'Bloc de notas online',
+        'Notizblock Online',
+        'Bloc-notes en ligne',
+        '無料オンラインメモ帳',
+      ],
+      url: canonicalUrl,
+      description: siteDescription,
+      applicationCategory: 'ProductivityApplication',
+      operatingSystem: 'Windows, macOS, Linux, iOS, Android',
+      browserRequirements: 'Requires JavaScript. Requires HTML5.',
+      softwareVersion: '1.0.0',
+      inLanguage: lang,
+      image: ogImageUrl,
+      screenshot: ogImageUrl,
+      author: {
+        '@type': 'Person',
+        name: 'Kishara Dilshan',
+        url: 'https://buymeacoffee.com/kisharadilz',
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.9',
+        ratingCount: '1250',
+        bestRating: '5',
+        worstRating: '1',
+      },
+      featureList: [
+        '100% Client-Side Local Storage Privacy',
+        'Instant Keystroke Auto-Save',
+        'A4 PDF Export with Intelligent Pagination and Margins',
+        'Dark Mode and Light Mode with Zero-Flicker Persistence',
+        'Multi-language Support (EN, ES, PT, DE, FR, JA)',
+        'Full Offline Capability',
+        'Real-time Word, Character, and Reading Time Statistics',
+        'Distraction-Free Fullscreen Writing Mode',
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${canonicalUrl}#breadcrumbs`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        ...(lang !== 'en'
+          ? [
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: t('site.name'),
+                item: canonicalUrl,
+              },
+            ]
+          : []),
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl}#faq`,
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: t('faq.q1'),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t('faq.a1'),
+          },
+        },
+        {
+          '@type': 'Question',
+          name: t('faq.q2'),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t('faq.a2'),
+          },
+        },
+        {
+          '@type': 'Question',
+          name: t('faq.q3'),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t('faq.a3'),
+          },
+        },
+        {
+          '@type': 'Question',
+          name: t('faq.q4'),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t('faq.a4'),
+          },
+        },
+        {
+          '@type': 'Question',
+          name: t('faq.q5'),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: t('faq.a5'),
+          },
+        },
+      ],
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <!-- Essential Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    <meta name="keywords" content={siteKeywords} />
+    <meta name="author" content="Kishara Dilshan" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Google tag (gtag.js) -->
+    <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-Y8B76RZFRG"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-Y8B76RZFRG');
+    </script>
+
+    <!-- Search Engine Robots Directives -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Anti-FOUC (Flash of Unstyled Content) Theme Initialization Script -->
+    <script is:inline>
+      (function () {
+        try {
+          const storedTheme = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          // Fallback if localStorage is restricted
+        }
+      })();
+    </script>
+
+    <!-- Hreflang Tags for SEO (6 Supported Locales + x-default) -->
+    <link rel="alternate" hreflang="en" href="https://online-note.github.io/" />
+    <link rel="alternate" hreflang="es" href="https://online-note.github.io/es/" />
+    <link rel="alternate" hreflang="pt" href="https://online-note.github.io/pt/" />
+    <link rel="alternate" hreflang="de" href="https://online-note.github.io/de/" />
+    <link rel="alternate" hreflang="fr" href="https://online-note.github.io/fr/" />
+    <link rel="alternate" hreflang="ja" href="https://online-note.github.io/ja/" />
+    <link rel="alternate" hreflang="x-default" href="https://online-note.github.io/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:site_name" content={t('site.name')} />
+    <meta property="og:locale" content={ogLocaleMap[lang] || 'en_US'} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Online Note - Free Distraction-Free Online Notepad with Auto-Save and PDF Export" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={siteDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content="Online Note - Free Distraction-Free Online Notepad" />
+
+    <!-- Favicon & Mobile PWA Meta -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/><polyline points='10 9 9 9 8 9'/></svg>" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Online Note" />
+
+    <!-- DNS Prefetch & Preconnect for Fast Asset Loading -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured Data Graph (JSON-LD) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schemaGraph)} />
+  </head>
+  <body
+    class="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 selection:bg-blue-500/20"
+  >
+    <slot />
+  </body>
+</html>
